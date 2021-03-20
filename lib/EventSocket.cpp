@@ -21,10 +21,28 @@ int EventSocket::Connect(sockaddr *addr, socklen_t len) {
     }
 }
 
+int EventSocket::Disconnect() {
+    _onDisconnectingReceiver();
+    if (shutdown(_socket_file_descriptor, SHUT_RDWR)) {
+        _onDisconnectedReceiver();
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void EventSocket::SubscribeOnConnected(std::function<void()> receiver) {
     _onConnectedReceiver = receiver;
 }
 
 void EventSocket::SubscribeOnConnecting(std::function<void()> receiver) {
     _onConnectingReceiver = receiver;
+}
+
+void EventSocket::SubscribeOnDisconnecting(std::function<void()> receiver) {
+    _onDisconnectingReceiver = receiver;
+}
+
+void EventSocket::SubscribeOnDisconnected(std::function<void()> receiver) {
+    _onDisconnectedReceiver = receiver;
 }
