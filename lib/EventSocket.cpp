@@ -12,5 +12,19 @@ int EventSocket::GetSocketFileDesciptor() {
 }
 
 int EventSocket::Connect(sockaddr *addr, socklen_t len) {
-    return connect(_socket_file_descriptor, addr, len);
+    _onConnectingReceiver();
+    if (connect(_socket_file_descriptor, addr, len)) {
+        _onConnectedReceiver();
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void EventSocket::SubscribeOnConnected(std::function<void()> receiver) {
+    _onConnectedReceiver = receiver;
+}
+
+void EventSocket::SubscribeOnConnecting(std::function<void()> receiver) {
+    _onConnectingReceiver = receiver;
 }
