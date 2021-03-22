@@ -14,11 +14,13 @@ class EventSocket
         std::function<void()> _onConnectingReceiver;
         std::function<void()> _onDisconnectedReceiver;
         std::function<void()> _onDisconnectingReceiver;
+        std::function<void()> _onBindReceiver;
     public:
         EventSocket(int domain, int type, int protocol);
         ~EventSocket();
 
         int GetSocketFileDesciptor();
+        int Bind(const sockaddr *addr, socklen_t len);
         int Connect(sockaddr *addr, socklen_t len);
         int Disconnect();
         int SendBytes();
@@ -28,5 +30,6 @@ class EventSocket
         void SubscribeOnDisconnected(std::function<void()> receiver);
         void SubscribeOnDisconnecting(std::function<void()> receiver);
 
+        void SubscribeOnBind(std::function<void()> receiver);
         void SubscribeOnSend(std::function<void()> receiver);
 };

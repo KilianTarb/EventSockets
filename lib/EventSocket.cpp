@@ -17,6 +17,23 @@ int EventSocket::GetSocketFileDesciptor() {
 }
 
 /**
+ * @brief Bind socket to local endpoint.
+ *
+ * @param addr
+ * Local endpoint address
+ * @param len
+ * Length of addr
+ *
+ * @return int. -1 if error, 0 if success
+ */
+int EventSocket::Bind(const sockaddr *addr, socklen_t len) {
+    int err = bind(_socket_file_descriptor, addr, len);
+    if (_onBindReceiver != NULL)
+        _onBindReceiver();
+    return err;
+}
+
+/**
  * @brief Connect to an endpoint. Invokes OnConnected and OnConnecting
  * 
  * @param addr 
