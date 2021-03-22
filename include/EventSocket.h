@@ -27,4 +27,6 @@ class EventSocket
         void SubscribeOnConnecting(std::function<void()> receiver);
         void SubscribeOnDisconnected(std::function<void()> receiver);
         void SubscribeOnDisconnecting(std::function<void()> receiver);
+
+        void SubscribeOnSend(std::function<void()> receiver);
 };
