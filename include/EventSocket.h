@@ -5,17 +5,19 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
+typedef std::function<void()> Callback;
+
 class EventSocket
 {
     private:
         int _socket_file_descriptor;
 
-        std::function<void()> _onConnectedReceiver;
-        std::function<void()> _onConnectingReceiver;
-        std::function<void()> _onDisconnectedReceiver;
-        std::function<void()> _onDisconnectingReceiver;
-        std::function<void()> _onBindReceiver;
-        std::function<void()> _onSendReceiver;
+        Callback _onConnectedReceiver;
+        Callback _onConnectingReceiver;
+        Callback _onDisconnectedReceiver;
+        Callback _onDisconnectingReceiver;
+        Callback _onBindReceiver;
+        Callback _onSendReceiver;
     public:
         EventSocket(int domain, int type, int protocol);
         ~EventSocket();
@@ -26,11 +28,11 @@ class EventSocket
         int Disconnect();
         int SendBytes();
         
-        void SubscribeOnConnected(std::function<void()> receiver);
-        void SubscribeOnConnecting(std::function<void()> receiver);
-        void SubscribeOnDisconnected(std::function<void()> receiver);
-        void SubscribeOnDisconnecting(std::function<void()> receiver);
+        void SubscribeOnConnected(Callback receiver);
+        void SubscribeOnConnecting(Callback receiver);
+        void SubscribeOnDisconnected(Callback receiver);
+        void SubscribeOnDisconnecting(Callback receiver);
 
-        void SubscribeOnBind(std::function<void()> receiver);
-        void SubscribeOnSend(std::function<void()> receiver);
+        void SubscribeOnBind(Callback receiver);
+        void SubscribeOnSend(Callback receiver);
 };
