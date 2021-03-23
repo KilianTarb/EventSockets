@@ -1,7 +1,7 @@
 #include "EventSocket.h"
 #include "gtest/gtest.h"
 
-GTEST_TEST (EventSocketTest, CreateSocket) {
+TEST (EventSocketTest, CreateSocket) {
     EventSocket sock(AF_INET, SOCK_STREAM, 0);
     EXPECT_NE(sock.GetSocketFileDesciptor(), NULL);
 }
