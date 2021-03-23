@@ -7,6 +7,8 @@ EventSocket::EventSocket(int domain, int type, int protocol) {
     }
 }
 
+EventSocket::~EventSocket() {}
+
 /**
  * @brief Returns the file desciptor of the socket.
  * 
