@@ -15,6 +15,7 @@ class EventSocket
         std::function<void()> _onDisconnectedReceiver;
         std::function<void()> _onDisconnectingReceiver;
         std::function<void()> _onBindReceiver;
+        std::function<void()> _onSendReceiver;
     public:
         EventSocket(int domain, int type, int protocol);
         ~EventSocket();
