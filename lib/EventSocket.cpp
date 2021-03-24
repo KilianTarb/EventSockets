@@ -76,22 +76,22 @@ int EventSocket::Disconnect() {
     }
 }
 
-void EventSocket::SubscribeOnConnected(std::function<void()> receiver) {
+void EventSocket::SubscribeOnConnected(Callback receiver) {
     _onConnectedReceiver = receiver;
 }
 
-void EventSocket::SubscribeOnConnecting(std::function<void()> receiver) {
+void EventSocket::SubscribeOnConnecting(Callback receiver) {
     _onConnectingReceiver = receiver;
 }
 
-void EventSocket::SubscribeOnDisconnecting(std::function<void()> receiver) {
+void EventSocket::SubscribeOnDisconnecting(Callback receiver) {
     _onDisconnectingReceiver = receiver;
 }
 
-void EventSocket::SubscribeOnDisconnected(std::function<void()> receiver) {
+void EventSocket::SubscribeOnDisconnected(Callback receiver) {
     _onDisconnectedReceiver = receiver;
 }
 
-void EventSocket::SubscribeOnListen(std::function<void()> receiver) {
+void EventSocket::SubscribeOnListen(Callback receiver) {
     _onListenReceiver = receiver;
 }
