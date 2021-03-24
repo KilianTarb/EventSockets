@@ -35,6 +35,14 @@ int EventSocket::Bind(const sockaddr *addr, socklen_t len) {
     return err;
 }
 
+/**
+ * @brief Set the socket to a listening states for accepting new connections
+ *
+ * @param max_queue
+ * The amount of connections that can be in the queue
+ *
+ * @return int. -1 if error, 0 if success
+ */
 int EventSocket::Listen(uint max_queue) {
     int err = listen(_socket_file_descriptor, max_queue);
     if (_onListenReceiver != NULL && err == 0)
