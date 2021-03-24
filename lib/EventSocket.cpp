@@ -35,6 +35,13 @@ int EventSocket::Bind(const sockaddr *addr, socklen_t len) {
     return err;
 }
 
+int EventSocket::Listen(uint max_queue) {
+    int err = listen(_socket_file_descriptor, max_queue);
+    if (_onListenReceiver != NULL && err == 0)
+        _onListenReceiver();
+    return err;
+}
+
 /**
  * @brief Connect to an endpoint. Invokes OnConnected and OnConnecting
  * 
@@ -83,4 +90,8 @@ void EventSocket::SubscribeOnDisconnecting(std::function<void()> receiver) {
 
 void EventSocket::SubscribeOnDisconnected(std::function<void()> receiver) {
     _onDisconnectedReceiver = receiver;
+}
+
+void EventSocket::SubscribeOnListen(std::function<void()> receiver) {
+    _onListenReceiver = receiver;
 }

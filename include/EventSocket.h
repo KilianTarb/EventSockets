@@ -17,6 +17,7 @@ class EventSocket
         Callback _onDisconnectedReceiver;
         Callback _onDisconnectingReceiver;
         Callback _onBindReceiver;
+        Callback _onListenReceiver;
         Callback _onSendReceiver;
     public:
         EventSocket(int domain, int type, int protocol);
@@ -24,6 +25,7 @@ class EventSocket
 
         int GetSocketFileDesciptor();
         int Bind(const sockaddr *addr, socklen_t len);
+        int Listen(uint max_queue);
         int Connect(sockaddr *addr, socklen_t len);
         int Disconnect();
         int SendBytes();
@@ -34,5 +36,6 @@ class EventSocket
         void SubscribeOnDisconnecting(Callback receiver);
 
         void SubscribeOnBind(Callback receiver);
+        void SubscribeOnListen(Callback receiver);
         void SubscribeOnSend(Callback receiver);
 };
