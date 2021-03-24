@@ -62,7 +62,7 @@ int EventSocket::Listen(uint max_queue) {
 int EventSocket::Connect(sockaddr *addr, socklen_t len) {
     if  (_onConnectingReceiver != NULL)
         _onConnectingReceiver();
-    if (connect(_socket_file_descriptor, addr, len)) {
+    if (connect(_socket_file_descriptor, addr, len) == 0) {
         if (_onConnectedReceiver != NULL)
             _onConnectedReceiver();
         return true;
@@ -79,7 +79,7 @@ int EventSocket::Connect(sockaddr *addr, socklen_t len) {
 int EventSocket::Disconnect() {
     if (_onDisconnectingReceiver != NULL)
         _onDisconnectingReceiver();
-    if (shutdown(_socket_file_descriptor, SHUT_RDWR)) {
+    if (shutdown(_socket_file_descriptor, SHUT_RDWR) == 0) {
         if (_onDisconnectedReceiver != NULL)
             _onDisconnectedReceiver();
         return true;
