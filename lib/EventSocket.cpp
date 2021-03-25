@@ -85,9 +85,9 @@ int EventSocket::Connect(sockaddr *addr, socklen_t len) {
     if (connect(_socket_file_descriptor, addr, len) == 0) {
         if (_onConnectedReceiver != NULL)
             _onConnectedReceiver();
-        return true;
+        return 0;
     } else {
-        return false;
+        return -1;
     }
 }
 
