@@ -108,22 +108,37 @@ int EventSocket::Disconnect() {
     }
 }
 
+/**
+ * @brief Invokes the receiever when the socket has connected to a remote endpoint.
+ */
 void EventSocket::SubscribeOnConnected(Callback receiver) {
     _onConnectedReceiver = receiver;
 }
 
+/**
+ * @brief Invokes the receiver before the socket attempts to connect to a remote endpoint.
+ */
 void EventSocket::SubscribeOnConnecting(Callback receiver) {
     _onConnectingReceiver = receiver;
 }
 
+/**
+ * @brief Invokes the receiver before the socket attempts to disconnect.
+ */
 void EventSocket::SubscribeOnDisconnecting(Callback receiver) {
     _onDisconnectingReceiver = receiver;
 }
 
+/**
+ * @brief Invokes thes receiver when the socket has disconnected.
+ */
 void EventSocket::SubscribeOnDisconnected(Callback receiver) {
     _onDisconnectedReceiver = receiver;
 }
 
+/**
+ * @brief Invokes the receiver when the socket has been put in a listening state.
+ */
 void EventSocket::SubscribeOnListen(Callback receiver) {
     _onListenReceiver = receiver;
 }
