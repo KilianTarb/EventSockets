@@ -26,6 +26,7 @@ class EventSocket
 
         int GetSocketFileDesciptor();
         int Bind(const sockaddr *addr, socklen_t len);
+        int Bind(const char *ip_cp, uint port, uint sock_type);
         int Listen(uint max_queue);
         int Connect(sockaddr *addr, socklen_t len);
         int Connect(const char *ip_cp, uint port, uint sock_type);

@@ -36,6 +36,26 @@ int EventSocket::Bind(const sockaddr *addr, socklen_t len) {
 }
 
 /**
+ * @brief Bind socket to local endpoint
+ *
+ * @param ip_cp
+ * IP address in presentation format.
+ * @param port
+ * Local port to bind to.
+ * @param sock_type
+ * Type of socket. Default is AF_INET.
+ *
+ * @return int. -1 if error, 0 if success
+ */
+int EventSocket::Bind(const char *ip_cp, uint port, uint sock_type = AF_INET) {
+    sockaddr_in remote_addr;
+    remote_addr.sin_family = sock_type;
+    remote_addr.sin_port = htons(port);
+    inet_aton(ip_cp, &remote_addr.sin_addr);
+    return Bind((sockaddr *)&remote_addr, sizeof(remote_addr));
+}
+
+/**
  * @brief Set the socket to a listening states for accepting new connections
  *
  * @param max_queue
