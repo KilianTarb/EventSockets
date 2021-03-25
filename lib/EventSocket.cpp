@@ -72,6 +72,26 @@ int EventSocket::Connect(sockaddr *addr, socklen_t len) {
 }
 
 /**
+ * @brief Connect to an endpoint. Invokes OnConnected and OnConnecting
+ *
+ * @param ip_cp
+ * Address in presentation format
+ * @param port
+ * Remote port
+ * @param sock_type
+ * Socket type. Default is AF_INET
+ *
+ * @return int. -1 on err, 0 on success
+ */
+int EventSocket::Connect(const char *ip_cp, uint port, uint sock_type = AF_INET) {
+    sockaddr_in remote_addr;
+    remote_addr.sin_family = sock_type;
+    remote_addr.sin_port = htons(port);
+    inet_aton(ip_cp, &remote_addr.sin_addr);
+    return Connect((sockaddr *)&remote_addr, sizeof(remote_addr));
+}
+
+/**
  * @brief Closes the socket's file desciptor. Invokes OnDisconnected and OnDisconnecting
  * 
  * @return int 
