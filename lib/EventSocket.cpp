@@ -12,7 +12,7 @@ EventSocket::~EventSocket() {}
 /**
  * @brief Returns the file desciptor of the socket.
  * 
-* @return int
+ * @return int
  */
 int EventSocket::GetSocketFileDesciptor() {
     return _socket_file_descriptor;
