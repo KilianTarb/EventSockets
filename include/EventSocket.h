@@ -19,6 +19,7 @@ class EventSocket
         Callback _onDisconnectingReceiver;
         Callback _onBindReceiver;
         Callback _onListenReceiver;
+        Callback _onSendingReceiver;
         Callback _onSendReceiver;
     public:
         EventSocket(int domain, int type, int protocol);
@@ -31,7 +32,7 @@ class EventSocket
         int Connect(sockaddr *addr, socklen_t len);
         int Connect(const char *ip_cp, uint port, uint sock_type);
         int Disconnect();
-        int SendBytes();
+        int SendTo(const void *buf, size_t len, sockaddr *remote);
         
         void SubscribeOnConnected(Callback receiver);
         void SubscribeOnConnecting(Callback receiver);
@@ -40,5 +41,6 @@ class EventSocket
 
         void SubscribeOnBind(Callback receiver);
         void SubscribeOnListen(Callback receiver);
+        void SubscribeOnSending(Callback receiver);
         void SubscribeOnSend(Callback receiver);
 };

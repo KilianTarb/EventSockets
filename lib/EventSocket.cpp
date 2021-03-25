@@ -128,6 +128,17 @@ int EventSocket::Disconnect() {
     }
 }
 
+
+int EventSocket::SendTo(const void *buf, size_t len, sockaddr *remote) {
+    if (_onSendingReceiver != NULL)
+        _onSendingReceiver();
+    size_t sent_len = sendto(_socket_file_descriptor, buf, len, NULL, remote, sizeof(remote));
+    if (sent_len > 0)
+        if (_onSendReceiver != NULL)
+            _onSendReceiver();
+    return sent_len;
+}
+
 /**
  * @brief Invokes the receiever when the socket has connected to a remote endpoint.
  */
@@ -156,6 +167,12 @@ void EventSocket::SubscribeOnDisconnected(Callback receiver) {
     _onDisconnectedReceiver = receiver;
 }
 
+/**
+ * @brief Invokes the receiver when the socket is about to send data.
+ */
+void EventSocket::SubscribeOnSending(Callback receiver) {
+    _onSendingReceiver = receiver;
+}
 /**
  * @brief Invokes the receiver when the socket has been put in a listening state.
  */
