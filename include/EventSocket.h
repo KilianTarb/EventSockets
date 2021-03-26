@@ -23,6 +23,8 @@ class EventSocket
         Callback _onSendReceiver;
         Callback _onReceivingReceiver;
         Callback _onReceiveReceiver;
+
+        sockaddr_in _convertToINET(const char *ip_cp, uint port);
     public:
         EventSocket(int domain, int type, int protocol);
         ~EventSocket();

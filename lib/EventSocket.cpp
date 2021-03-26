@@ -10,6 +10,24 @@ EventSocket::EventSocket(int domain, int type, int protocol) {
 EventSocket::~EventSocket() {}
 
 /**
+ * @brief Converts and IPv4 address and port into binary.
+ * 
+ * @param ip_cp
+ * IPv4 address and presentation format
+ * @param port
+ * Endpoint port
+ *
+ * @return sockaddr_in data structure
+ */
+sockaddr_in EventSocket::_convertToINET(const char *ip_cp, uint port) {
+    sockaddr_in inet_addr;
+    inet_addr.sin_family = AF_INET;
+    inet_addr.sin_port = htons(port);
+    inet_aton(ip_cp, &inet_addr.sin_addr);
+    return inet_addr;
+}
+
+/**
  * @brief Returns the file desciptor of the socket.
  * 
  * @return int
