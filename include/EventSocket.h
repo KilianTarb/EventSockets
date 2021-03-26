@@ -32,7 +32,8 @@ class EventSocket
         int Connect(sockaddr *addr, socklen_t len);
         int Connect(const char *ip_cp, uint port, uint sock_type);
         int Disconnect();
-        int SendTo(const void *buf, size_t len, sockaddr *remote);
+        int SendTo(const void *buf, int flags, size_t len, sockaddr *remote);
+        int SendTo(const void *buf, int flags, size_t len, const char *remote_ip, uint port, uint sock_type);
         
         void SubscribeOnConnected(Callback receiver);
         void SubscribeOnConnecting(Callback receiver);

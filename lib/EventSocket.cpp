@@ -129,14 +129,22 @@ int EventSocket::Disconnect() {
 }
 
 
-int EventSocket::SendTo(const void *buf, size_t len, sockaddr *remote) {
+int EventSocket::SendTo(const void *buf, int flags, size_t len, sockaddr *remote) {
     if (_onSendingReceiver != NULL)
         _onSendingReceiver();
-    size_t sent_len = sendto(_socket_file_descriptor, buf, len, NULL, remote, sizeof(remote));
+    size_t sent_len = sendto(_socket_file_descriptor, buf, len, flags, remote, sizeof(remote));
     if (sent_len > 0)
         if (_onSendReceiver != NULL)
             _onSendReceiver();
     return sent_len;
+}
+
+int EventSocket::SendTo(const void *buf, int flags, size_t len, const char *remote_ip, uint port, uint sock_type) {
+    sockaddr_in remote_addr;
+    remote_addr.sin_family = sock_type;
+    remote_addr.sin_port = htons(port);
+    inet_aton(remote_ip, &remote_addr.sin_addr);
+    return SendTo(buf, flags, len, (struct sockaddr *)&remote_addr);
 }
 
 /**
