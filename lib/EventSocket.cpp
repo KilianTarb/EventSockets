@@ -181,6 +181,14 @@ void EventSocket::SubscribeOnDisconnected(Callback receiver) {
 void EventSocket::SubscribeOnSending(Callback receiver) {
     _onSendingReceiver = receiver;
 }
+
+/**
+ * @brief Invokes the receiver when the socket has sent data.
+ */
+void EventSocket::SubscribeOnSend(Callback receiver) {
+    _onSendReceiver = receiver;
+}
+
 /**
  * @brief Invokes the receiver when the socket has been put in a listening state.
  */
