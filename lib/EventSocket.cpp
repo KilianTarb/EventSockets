@@ -168,7 +168,7 @@ int EventSocket::SendTo(const void *buf, int flags, size_t len, const char *remo
 int EventSocket::ReceiveFrom(void *buf, int flags, size_t len, sockaddr *remote) {
     if (_onReceivingReceiver != NULL)
         _onReceivingReceiver();
-    size_t len = recvfrom(_socket_file_descriptor, buf, len, flags, remote, (socklen_t *)sizeof(remote));
+    size_t rlen = recvfrom(_socket_file_descriptor, buf, len, flags, remote, (socklen_t *)sizeof(remote));
     if (_onReceiveReceiver != NULL)
         _onReceiveReceiver();
     return len;
