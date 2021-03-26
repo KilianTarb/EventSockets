@@ -66,10 +66,7 @@ int EventSocket::Bind(const sockaddr *addr, socklen_t len) {
  * @return int. -1 if error, 0 if success
  */
 int EventSocket::Bind(const char *ip_cp, uint port, uint sock_type = AF_INET) {
-    sockaddr_in remote_addr;
-    remote_addr.sin_family = sock_type;
-    remote_addr.sin_port = htons(port);
-    inet_aton(ip_cp, &remote_addr.sin_addr);
+    sockaddr_in remote_addr = _convertToINET(ip_cp, port);
     return Bind((sockaddr *)&remote_addr, sizeof(remote_addr));
 }
 
@@ -122,10 +119,7 @@ int EventSocket::Connect(sockaddr *addr, socklen_t len) {
  * @return int. -1 on err, 0 on success
  */
 int EventSocket::Connect(const char *ip_cp, uint port, uint sock_type = AF_INET) {
-    sockaddr_in remote_addr;
-    remote_addr.sin_family = sock_type;
-    remote_addr.sin_port = htons(port);
-    inet_aton(ip_cp, &remote_addr.sin_addr);
+    sockaddr_in remote_addr = _convertToINET(ip_cp, port);
     return Connect((sockaddr *)&remote_addr, sizeof(remote_addr));
 }
 
@@ -158,10 +152,7 @@ int EventSocket::SendTo(const void *buf, int flags, size_t len, sockaddr *remote
 }
 
 int EventSocket::SendTo(const void *buf, int flags, size_t len, const char *remote_ip, uint port, uint sock_type) {
-    sockaddr_in remote_addr;
-    remote_addr.sin_family = sock_type;
-    remote_addr.sin_port = htons(port);
-    inet_aton(remote_ip, &remote_addr.sin_addr);
+    sockaddr_in remote_addr = _convertToINET(remote_ip, port);
     return SendTo(buf, flags, len, (struct sockaddr *)&remote_addr);
 }
 
@@ -175,10 +166,7 @@ int EventSocket::ReceiveFrom(void *buf, int flags, size_t len, sockaddr *remote)
 }
 
 int EventSocket::ReceiveFrom(void *buf, int flags, size_t len, const char *remote_ip, uint port, uint sock_type) {
-    sockaddr_in remote_addr;
-    remote_addr.sin_family = sock_type;
-    remote_addr.sin_port = htons(port);
-    inet_aton(remote_ip, &remote_addr.sin_addr);
+    sockaddr_in remote_addr = _convertToINET(remote_ip, port);
     return ReceiveFrom(buf, flags, len, (struct sockaddr *)&remote_addr);
 }
 
