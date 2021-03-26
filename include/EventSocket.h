@@ -21,6 +21,8 @@ class EventSocket
         Callback _onListenReceiver;
         Callback _onSendingReceiver;
         Callback _onSendReceiver;
+        Callback _onReceivingReceiver;
+        Callback _onReceiveReceiver;
     public:
         EventSocket(int domain, int type, int protocol);
         ~EventSocket();
@@ -34,7 +36,9 @@ class EventSocket
         int Disconnect();
         int SendTo(const void *buf, int flags, size_t len, sockaddr *remote);
         int SendTo(const void *buf, int flags, size_t len, const char *remote_ip, uint port, uint sock_type);
-        
+        int ReceiveFrom(void *buf, int flags, size_t len, sockaddr *remote);
+        int ReceiveFrom(void *buf, int flags, size_t len, const char *remote_ip, uint port, uint sock_type);
+
         void SubscribeOnConnected(Callback receiver);
         void SubscribeOnConnecting(Callback receiver);
         void SubscribeOnDisconnected(Callback receiver);
@@ -44,4 +48,6 @@ class EventSocket
         void SubscribeOnListen(Callback receiver);
         void SubscribeOnSending(Callback receiver);
         void SubscribeOnSend(Callback receiver);
+        void SubscribeOnReceiving(Callback receiver);
+        void SubscribeOnReceive(Callback receiver);
 };

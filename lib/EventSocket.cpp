@@ -147,6 +147,23 @@ int EventSocket::SendTo(const void *buf, int flags, size_t len, const char *remo
     return SendTo(buf, flags, len, (struct sockaddr *)&remote_addr);
 }
 
+int EventSocket::ReceiveFrom(void *buf, int flags, size_t len, sockaddr *remote) {
+    if (_onReceivingReceiver != NULL)
+        _onReceivingReceiver();
+    size_t len = recvfrom(_socket_file_descriptor, buf, len, flags, remote, (socklen_t *)sizeof(remote));
+    if (_onReceiveReceiver != NULL)
+        _onReceiveReceiver();
+    return len;
+}
+
+int EventSocket::ReceiveFrom(void *buf, int flags, size_t len, const char *remote_ip, uint port, uint sock_type) {
+    sockaddr_in remote_addr;
+    remote_addr.sin_family = sock_type;
+    remote_addr.sin_port = htons(port);
+    inet_aton(remote_ip, &remote_addr.sin_addr);
+    return ReceiveFrom(buf, flags, len, (struct sockaddr *)&remote_addr);
+}
+
 /**
  * @brief Invokes the receiever when the socket has connected to a remote endpoint.
  */
@@ -194,4 +211,18 @@ void EventSocket::SubscribeOnSend(Callback receiver) {
  */
 void EventSocket::SubscribeOnListen(Callback receiver) {
     _onListenReceiver = receiver;
+}
+
+/**
+ * @brief Invokes the receiver when the socket is about to receive data.
+ */
+void EventSocket::SubscribeOnReceiving(Callback receiver) {
+    _onReceivingReceiver = receiver;
+}
+
+/**
+ * @brief Invokes the receiver when the socket has received data.
+ */
+void EventSocket::SubscribeOnReceive(Callback receiver) {
+    _onReceiveReceiver = receiver;
 }
