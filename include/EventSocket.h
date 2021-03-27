@@ -25,6 +25,7 @@ class EventSocket
         Callback _onReceiveReceiver;
 
         sockaddr_in _convertToINET(const char *ip_cp, uint port);
+        bool _invokeCallback(Callback callback);
     public:
         EventSocket(int domain, int type, int protocol);
         ~EventSocket();

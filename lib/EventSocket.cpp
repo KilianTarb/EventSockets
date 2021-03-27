@@ -27,6 +27,13 @@ sockaddr_in EventSocket::_convertToINET(const char *ip_cp, uint port) {
     return inet_addr;
 }
 
+bool EventSocket::_invokeCallback(Callback callback) {
+    if (callback == NULL)
+        return false;
+    callback();
+    return true;
+}
+
 /**
  * @brief Returns the file desciptor of the socket.
  * 
@@ -48,8 +55,7 @@ int EventSocket::GetSocketFileDesciptor() {
  */
 int EventSocket::Bind(const sockaddr *addr, socklen_t len) {
     int err = bind(_socket_file_descriptor, addr, len);
-    if (_onBindReceiver != NULL)
-        _onBindReceiver();
+    _invokeCallback(_onBindReceiver);
     return err;
 }
 
@@ -80,8 +86,8 @@ int EventSocket::Bind(const char *ip_cp, uint port, uint sock_type = AF_INET) {
  */
 int EventSocket::Listen(uint max_queue) {
     int err = listen(_socket_file_descriptor, max_queue);
-    if (_onListenReceiver != NULL && err == 0)
-        _onListenReceiver();
+    if (err == 0)
+        _invokeCallback(_onListenReceiver);
     return err;
 }
 
@@ -95,11 +101,9 @@ int EventSocket::Listen(uint max_queue) {
  * @return int 
  */
 int EventSocket::Connect(sockaddr *addr, socklen_t len) {
-    if  (_onConnectingReceiver != NULL)
-        _onConnectingReceiver();
+    _invokeCallback(_onConnectingReceiver);
     if (connect(_socket_file_descriptor, addr, len) == 0) {
-        if (_onConnectedReceiver != NULL)
-            _onConnectedReceiver();
+        _invokeCallback(_onConnectedReceiver);
         return 0;
     } else {
         return -1;
@@ -129,11 +133,9 @@ int EventSocket::Connect(const char *ip_cp, uint port, uint sock_type = AF_INET)
  * @return int 
  */
 int EventSocket::Disconnect() {
-    if (_onDisconnectingReceiver != NULL)
-        _onDisconnectingReceiver();
+    _invokeCallback(_onDisconnectingReceiver);
     if (shutdown(_socket_file_descriptor, SHUT_RDWR) == 0) {
-        if (_onDisconnectedReceiver != NULL)
-            _onDisconnectedReceiver();
+        _invokeCallback(_onDisconnectedReceiver);
         return true;
     } else {
         return false;
@@ -142,12 +144,10 @@ int EventSocket::Disconnect() {
 
 
 int EventSocket::SendTo(const void *buf, int flags, size_t len, sockaddr *remote) {
-    if (_onSendingReceiver != NULL)
-        _onSendingReceiver();
+    _invokeCallback(_onSendingReceiver);
     size_t sent_len = sendto(_socket_file_descriptor, buf, len, flags, remote, sizeof(remote));
     if (sent_len > 0)
-        if (_onSendReceiver != NULL)
-            _onSendReceiver();
+        _invokeCallback(_onSendReceiver);
     return sent_len;
 }
 
@@ -157,11 +157,9 @@ int EventSocket::SendTo(const void *buf, int flags, size_t len, const char *remo
 }
 
 int EventSocket::ReceiveFrom(void *buf, int flags, size_t len, sockaddr *remote) {
-    if (_onReceivingReceiver != NULL)
-        _onReceivingReceiver();
+    _invokeCallback(_onReceivingReceiver);
     size_t rlen = recvfrom(_socket_file_descriptor, buf, len, flags, remote, (socklen_t *)sizeof(remote));
-    if (_onReceiveReceiver != NULL)
-        _onReceiveReceiver();
+    _invokeCallback(_onReceiveReceiver);
     return len;
 }
 
