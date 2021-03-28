@@ -20,6 +20,7 @@ class EventSocket
         Callback _onDisconnectedReceiver;
         Callback _onDisconnectingReceiver;
         Callback _onBindReceiver;
+        Callback _onBindFailed;
         Callback _onListenReceiver;
         Callback _onSendingReceiver;
         Callback _onSendReceiver;
@@ -51,6 +52,7 @@ class EventSocket
         void SubscribeOnDisconnecting(Callback receiver);
 
         void SubscribeOnBind(Callback receiver);
+        void SubscribeOnBindFailed(Callback receiver);
         void SubscribeOnListen(Callback receiver);
         void SubscribeOnSending(Callback receiver);
         void SubscribeOnSend(Callback receiver);

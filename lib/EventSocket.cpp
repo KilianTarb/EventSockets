@@ -54,9 +54,13 @@ int EventSocket::GetSocketFileDesciptor() {
  * @return int. -1 if error, 0 if success
  */
 int EventSocket::Bind(const sockaddr *addr, socklen_t len) {
-    int err = bind(_socket_file_descriptor, addr, len);
-    _invokeCallback(_onBindReceiver);
-    return err;
+    if (bind(_socket_file_descriptor, addr, len) == 0) {
+        _invokeCallback(_onBindReceiver);
+        return 0;
+    } else {
+        _invokeCallback(_onBindFailed);
+        return -1;
+    }
 }
 
 /**
@@ -174,6 +178,13 @@ int EventSocket::ReceiveFrom(void *buf, int flags, size_t len, const char *remot
  */
 void EventSocket::SubscribeOnBind(Callback receiver) {
     _onBindReceiver = receiver;
+}
+
+/**
+ * @brief Invokes the receiver when the socket bind attempt failed.
+ */
+void EventSocket::SubscribeOnBindFailed(Callback receiver) {
+    _onBindFailed = receiver;
 }
 
 /**
