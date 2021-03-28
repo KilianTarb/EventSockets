@@ -96,6 +96,28 @@ int EventSocket::Listen(uint max_queue) {
 }
 
 /**
+ * @brief Accepts a connection in the listening queue.
+ * 
+ * @param remote_addr
+ * sockaddr data structure to hold the remote endpoint.
+ * 
+ * @param len
+ * length of the socket.
+ * 
+ * @return int. connecting socket's file descriptor.
+ */
+int EventSocket::Accept(sockaddr *remote_addr, socklen_t *len) {
+    _invokeCallback(_onAccpetingReceiver);
+    if (accept(_socket_file_descriptor, remote_addr, len) != -1) {
+        _invokeCallback(_onAcceptReceiver);
+        return 0;
+    } else {
+        _invokeCallback(_onAcceptFailedReceiver);
+        return -1;
+    }
+}
+
+/**
  * @brief Connect to an endpoint. Invokes OnConnected and OnConnecting
  * 
  * @param addr 
@@ -241,6 +263,27 @@ void EventSocket::SubscribeOnSend(Callback receiver) {
  */
 void EventSocket::SubscribeOnListen(Callback receiver) {
     _onListenReceiver = receiver;
+}
+
+/**
+ * @brief Invokes the receiver when the socket has been put in a listening state.
+ */
+void EventSocket::SubscribeOnAccepting(Callback receiver) {
+    _onAccpetingReceiver = receiver;
+}
+
+/**
+ * @brief Invokes the receiver when the socket has been put in a listening state.
+ */
+void EventSocket::SubscribeOnAccept(Callback receiver) {
+    _onAcceptReceiver = receiver;
+}
+
+/**
+ * @brief Invokes the receiver when the socket has been put in a listening state.
+ */
+void EventSocket::SubscribeOnAcceptFailed(Callback receiver) {
+    _onAcceptFailedReceiver = receiver;
 }
 
 /**

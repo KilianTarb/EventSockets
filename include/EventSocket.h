@@ -22,6 +22,9 @@ class EventSocket
         Callback _onBindReceiver;
         Callback _onBindFailed;
         Callback _onListenReceiver;
+        Callback _onAccpetingReceiver;
+        Callback _onAcceptReceiver;
+        Callback _onAcceptFailedReceiver;
         Callback _onSendingReceiver;
         Callback _onSendReceiver;
         Callback _onReceivingReceiver;
@@ -37,6 +40,7 @@ class EventSocket
         int Bind(const sockaddr *addr, socklen_t len);
         int Bind(const char *ip_cp, uint port, uint sock_type);
         int Listen(uint max_queue);
+        int Accept(sockaddr *remote_addr, socklen_t *len);
         int Connect(sockaddr *addr, socklen_t len);
         int Connect(const char *ip_cp, uint port, uint sock_type);
         int Disconnect();
@@ -54,6 +58,9 @@ class EventSocket
         void SubscribeOnBind(Callback receiver);
         void SubscribeOnBindFailed(Callback receiver);
         void SubscribeOnListen(Callback receiver);
+        void SubscribeOnAccepting(Callback receiver);
+        void SubscribeOnAccept(Callback receiver);
+        void SubscribeOnAcceptFailed(Callback receiver);
         void SubscribeOnSending(Callback receiver);
         void SubscribeOnSend(Callback receiver);
         void SubscribeOnReceiving(Callback receiver);
