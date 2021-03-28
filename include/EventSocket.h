@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include "arpa/inet.h"
+#include <unistd.h>
 
 typedef std::function<void()> Callback;
 
@@ -15,6 +16,7 @@ class EventSocket
 
         Callback _onConnectedReceiver;
         Callback _onConnectingReceiver;
+        Callback _onConnectFailed;
         Callback _onDisconnectedReceiver;
         Callback _onDisconnectingReceiver;
         Callback _onBindReceiver;
@@ -44,6 +46,7 @@ class EventSocket
 
         void SubscribeOnConnected(Callback receiver);
         void SubscribeOnConnecting(Callback receiver);
+        void SubscribeOnConnectFailed(Callback receiver);
         void SubscribeOnDisconnected(Callback receiver);
         void SubscribeOnDisconnecting(Callback receiver);
 

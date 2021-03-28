@@ -106,6 +106,7 @@ int EventSocket::Connect(sockaddr *addr, socklen_t len) {
         _invokeCallback(_onConnectedReceiver);
         return 0;
     } else {
+        _invokeCallback(_onConnectFailed);
         return -1;
     }
 }
@@ -176,10 +177,17 @@ void EventSocket::SubscribeOnBind(Callback receiver) {
 }
 
 /**
- * @brief Invokes the receiever when the socket has connected to a remote endpoint.
+ * @brief Invokes the receiver when the socket has connected to a remote endpoint.
  */
 void EventSocket::SubscribeOnConnected(Callback receiver) {
     _onConnectedReceiver = receiver;
+}
+
+/**
+ * @brief Invokes the receiver when the connection attempt fails.
+ */
+void EventSocket::SubscribeOnConnectFailed(Callback receiver) {
+    _onConnectFailed = receiver;
 }
 
 /**
