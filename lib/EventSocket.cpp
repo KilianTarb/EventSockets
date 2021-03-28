@@ -169,6 +169,13 @@ int EventSocket::ReceiveFrom(void *buf, int flags, size_t len, const char *remot
 }
 
 /**
+ * @brief Invokes the receiver when the socket has binded.
+ */
+void EventSocket::SubscribeOnBind(Callback receiver) {
+    _onBindReceiver = receiver;
+}
+
+/**
  * @brief Invokes the receiever when the socket has connected to a remote endpoint.
  */
 void EventSocket::SubscribeOnConnected(Callback receiver) {
