@@ -169,7 +169,20 @@ int EventSocket::Disconnect() {
     }
 }
 
-
+/**
+ * @brief Sends the buffer to the remote endpoint
+ *
+ * @param buf
+ * The buffer
+ * @param flags
+ * Sending flags
+ * @param len
+ * Amount of bytes to send
+ * @param remote
+ * The remote endpoint
+ *
+ * @return bytes send
+ */
 int EventSocket::SendTo(const void *buf, int flags, size_t len, sockaddr *remote) {
     _invokeCallback(_onSendingReceiver);
     size_t sent_len = sendto(_socket_file_descriptor, buf, len, flags, remote, sizeof(remote));
