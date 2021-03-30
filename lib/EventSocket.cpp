@@ -196,6 +196,9 @@ int EventSocket::SendTo(const void *buf, int flags, size_t len, const char *remo
     return SendTo(buf, flags, len, (struct sockaddr *)&remote_addr);
 }
 
+/**
+ * @brief Receive from from remote address
+ */
 int EventSocket::ReceiveFrom(void *buf, int flags, size_t len, sockaddr *remote) {
     _invokeCallback(_onReceivingReceiver);
     size_t rlen = recvfrom(_socket_file_descriptor, buf, len, flags, remote, (socklen_t *)sizeof(remote));
