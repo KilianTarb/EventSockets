@@ -170,6 +170,27 @@ int EventSocket::Disconnect() {
 }
 
 /**
+ * @brief Sends BUF to the connected endpoint. The socket already be connect for this. @see Connect
+ *
+ * @param buf 
+ * The buffer to send
+ * @param len
+ * Amount of bytes to sned
+ * @param
+ * Packet flags
+ *
+ * @return int. -1 on error, the amount of bytes send on success
+ */
+int EventSocket::Send(const void *buf, size_t len, int flags) {
+    _invokeCallback(_onSendingReceiver);
+    size_t bytes_sent = send(_socket_file_descriptor, buf, len, flags);
+    if (bytes_sent == -1)
+        return bytes_sent;
+    _invokeCallback(_onSendReceiver);
+    return bytes_sent;
+}
+
+/**
  * @brief Sends the buffer to the remote endpoint
  *
  * @param buf
