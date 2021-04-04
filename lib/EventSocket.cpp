@@ -228,9 +228,9 @@ int EventSocket::SendTo(const void *buf, int flags, size_t len, const char *remo
  * @param flags
  * @return int. -1 on error, bytes received on success.
  */
-int EventSocket::Receive(void *buf, size_t len, int flags) {
+int EventSocket::Receive(int remote_socket_descriptor, void *buf, size_t len, int flags) {
     _invokeCallback(_onReceivingReceiver);
-    size_t bytes_received = recv(_socket_file_descriptor, buf, len, flags);
+    size_t bytes_received = recv(remote_socket_descriptor, buf, len, flags);
     if (bytes_received == -1)
         _invokeCallback(_onReceiveFailedReceiver);
     else

@@ -48,7 +48,7 @@ class EventSocket
         int Send(const void *buf, size_t len, int flags);
         int SendTo(const void *buf, int flags, size_t len, sockaddr *remote);
         int SendTo(const void *buf, int flags, size_t len, const char *remote_ip, uint port, uint sock_type);
-        int Receive(void *buf, size_t len, int flags);
+        int Receive(int remote_socket_descriptor, void *buf, size_t len, int flags);
         int ReceiveFrom(void *buf, int flags, size_t len, sockaddr *remote);
         int ReceiveFrom(void *buf, int flags, size_t len, const char *remote_ip, uint port, uint sock_type);
 
