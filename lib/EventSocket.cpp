@@ -108,13 +108,14 @@ int EventSocket::Listen(uint max_queue) {
  */
 int EventSocket::Accept(sockaddr *remote_addr, socklen_t *len) {
     _invokeCallback(_onAccpetingReceiver);
-    if (accept(_socket_file_descriptor, remote_addr, len) != -1) {
+    int new_descriptor = accept(_socket_file_descriptor, remote_addr, len);
+
+    if (new_descriptor != -1)
         _invokeCallback(_onAcceptReceiver);
-        return 0;
-    } else {
+    else
         _invokeCallback(_onAcceptFailedReceiver);
-        return -1;
-    }
+
+    return new_descriptor;
 }
 
 /**
