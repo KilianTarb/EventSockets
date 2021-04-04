@@ -218,11 +218,24 @@ int EventSocket::SendTo(const void *buf, int flags, size_t len, const char *remo
     return SendTo(buf, flags, len, (struct sockaddr *)&remote_addr);
 }
 
+/**
+ * @brief Begin receiving data from the connected endpoint.
+ *
+ * @param buf
+ * Buffer to hold the data
+ * @param len
+ * Amount of data to hold
+ * @param flags
+ * @return int. -1 on error, bytes received on success.
+ */
 int EventSocket::Receive(void *buf, size_t len, int flags) {
     _invokeCallback(_onReceivingReceiver);
-    size_t rec = recv(_socket_file_descriptor, buf, len, flags);
-    _invokeCallback(_onReceiveReceiver);
-    return rec;
+    size_t bytes_received = recv(_socket_file_descriptor, buf, len, flags);
+    if (bytes_received == -1)
+        _invokeCallback(_onReceiveFailedReceiver);
+    else
+        _invokeCallback(_onReceiveReceiver);
+    return bytes_received;
 }
 
 /**
@@ -343,4 +356,11 @@ void EventSocket::SubscribeOnReceiving(Callback receiver) {
  */
 void EventSocket::SubscribeOnReceive(Callback receiver) {
     _onReceiveReceiver = receiver;
+}
+
+/**
+ * @brief Invokes the receiver when the socket has received data.
+ */
+void EventSocket::SubscribeOnReceiveFailed(Callback receiver) {
+    _onReceiveFailedReceiver = receiver;
 }

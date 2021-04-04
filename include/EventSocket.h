@@ -29,6 +29,7 @@ class EventSocket
         Callback _onSendReceiver;
         Callback _onReceivingReceiver;
         Callback _onReceiveReceiver;
+        Callback _onReceiveFailedReceiver;
 
         sockaddr_in _convertToINET(const char *ip_cp, uint port);
         bool _invokeCallback(Callback callback);
@@ -67,4 +68,5 @@ class EventSocket
         void SubscribeOnSend(Callback receiver);
         void SubscribeOnReceiving(Callback receiver);
         void SubscribeOnReceive(Callback receiver);
+        void SubscribeOnReceiveFailed(Callback receiver);
 };
