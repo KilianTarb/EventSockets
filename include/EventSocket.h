@@ -38,13 +38,13 @@ class EventSocket
         ~EventSocket();
 
         int GetSocketFileDesciptor();
-        int Bind(const sockaddr *addr, socklen_t len);
-        int Bind(const char *ip_cp, uint port, uint sock_type);
-        int Listen(uint max_queue);
+        bool Bind(const sockaddr *addr, socklen_t len);
+        bool Bind(const char *ip_cp, uint port, uint sock_type);
+        bool Listen(uint max_queue);
         int Accept(sockaddr *remote_addr, socklen_t *len);
-        int Connect(sockaddr *addr, socklen_t len);
-        int Connect(const char *ip_cp, uint port, uint sock_type);
-        int Disconnect();
+        bool Connect(sockaddr *addr, socklen_t len);
+        bool Connect(const char *ip_cp, uint port, uint sock_type);
+        bool Disconnect();
         int Send(const void *buf, size_t len, int flags);
         int SendTo(const void *buf, int flags, size_t len, sockaddr *remote);
         int SendTo(const void *buf, int flags, size_t len, const char *remote_ip, uint port, uint sock_type);

@@ -27,6 +27,14 @@ sockaddr_in EventSocket::_convertToINET(const char *ip_cp, uint port) {
     return inet_addr;
 }
 
+/**
+ * @brief Invokes a Callback.
+ *
+ * @param callback
+ * The function pointer
+ * @return true
+ * @return false
+ */
 bool EventSocket::_invokeCallback(Callback callback) {
     if (callback == NULL)
         return false;
@@ -51,15 +59,15 @@ int EventSocket::GetSocketFileDesciptor() {
  * @param len
  * Length of addr
  *
- * @return int. -1 if error, 0 if success
+ * @return True on success, False on error
  */
-int EventSocket::Bind(const sockaddr *addr, socklen_t len) {
+bool EventSocket::Bind(const sockaddr *addr, socklen_t len) {
     if (bind(_socket_file_descriptor, addr, len) == 0) {
         _invokeCallback(_onBindReceiver);
-        return 0;
+        return true;
     } else {
         _invokeCallback(_onBindFailed);
-        return -1;
+        return false;
     }
 }
 
@@ -73,9 +81,9 @@ int EventSocket::Bind(const sockaddr *addr, socklen_t len) {
  * @param sock_type
  * Type of socket. Default is AF_INET.
  *
- * @return int. -1 if error, 0 if success
+ * @return True on success, False on error
  */
-int EventSocket::Bind(const char *ip_cp, uint port, uint sock_type = AF_INET) {
+bool EventSocket::Bind(const char *ip_cp, uint port, uint sock_type = AF_INET) {
     sockaddr_in remote_addr = _convertToINET(ip_cp, port);
     return Bind((sockaddr *)&remote_addr, sizeof(remote_addr));
 }
@@ -86,9 +94,9 @@ int EventSocket::Bind(const char *ip_cp, uint port, uint sock_type = AF_INET) {
  * @param max_queue
  * The amount of connections that can be in the queue
  *
- * @return int. -1 if error, 0 if success
+ * @return True on success, False on error
  */
-int EventSocket::Listen(uint max_queue) {
+bool EventSocket::Listen(uint max_queue) {
     int err = listen(_socket_file_descriptor, max_queue);
     if (err == 0)
         _invokeCallback(_onListenReceiver);
@@ -104,7 +112,7 @@ int EventSocket::Listen(uint max_queue) {
  * @param len
  * length of the socket.
  * 
- * @return int. connecting socket's file descriptor.
+ * @return int. connecting socket's file descriptor, -1 on error
  */
 int EventSocket::Accept(sockaddr *remote_addr, socklen_t *len) {
     _invokeCallback(_onAccpetingReceiver);
@@ -125,16 +133,16 @@ int EventSocket::Accept(sockaddr *remote_addr, socklen_t *len) {
  * Endpoint address
  * @param len 
  * Length of the endpoint address
- * @return int 
+ * @return True on success, False on error
  */
-int EventSocket::Connect(sockaddr *addr, socklen_t len) {
+bool EventSocket::Connect(sockaddr *addr, socklen_t len) {
     _invokeCallback(_onConnectingReceiver);
     if (connect(_socket_file_descriptor, addr, len) == 0) {
         _invokeCallback(_onConnectedReceiver);
-        return 0;
+        return true;
     } else {
         _invokeCallback(_onConnectFailed);
-        return -1;
+        return false;
     }
 }
 
@@ -148,9 +156,9 @@ int EventSocket::Connect(sockaddr *addr, socklen_t len) {
  * @param sock_type
  * Socket type. Default is AF_INET
  *
- * @return int. -1 on err, 0 on success
+ * @return True on success, False on error
  */
-int EventSocket::Connect(const char *ip_cp, uint port, uint sock_type = AF_INET) {
+bool EventSocket::Connect(const char *ip_cp, uint port, uint sock_type = AF_INET) {
     sockaddr_in remote_addr = _convertToINET(ip_cp, port);
     return Connect((sockaddr *)&remote_addr, sizeof(remote_addr));
 }
@@ -158,9 +166,9 @@ int EventSocket::Connect(const char *ip_cp, uint port, uint sock_type = AF_INET)
 /**
  * @brief Closes the socket's file desciptor. Invokes OnDisconnected and OnDisconnecting
  * 
- * @return int 
+ * @return True on success, False on error
  */
-int EventSocket::Disconnect() {
+bool EventSocket::Disconnect() {
     _invokeCallback(_onDisconnectingReceiver);
     if (shutdown(_socket_file_descriptor, SHUT_RDWR) == 0) {
         _invokeCallback(_onDisconnectedReceiver);
