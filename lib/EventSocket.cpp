@@ -59,15 +59,15 @@ int EventSocket::GetSocketFileDesciptor() {
  * @param len
  * Length of addr
  *
- * @return True on success, False on error
+ * @return 0 on success, errno on failed.
  */
-bool EventSocket::Bind(const sockaddr *addr, socklen_t len) {
-    if (bind(_socket_file_descriptor, addr, len) == 0) {
+int EventSocket::Bind(const sockaddr *addr, socklen_t len) {
+    if (int err = bind(_socket_file_descriptor, addr, len) == 0) {
         _invokeCallback(_onBindReceiver);
-        return true;
+        return 0;
     } else {
         _invokeCallback(_onBindFailed);
-        return false;
+        return err;
     }
 }
 
@@ -81,9 +81,9 @@ bool EventSocket::Bind(const sockaddr *addr, socklen_t len) {
  * @param sock_type
  * Type of socket. Default is AF_INET.
  *
- * @return True on success, False on error
+ * @return 0 on success, errno on failed.
  */
-bool EventSocket::Bind(const char *ip_cp, uint port, uint sock_type = AF_INET) {
+int EventSocket::Bind(const char *ip_cp, uint port, uint sock_type = AF_INET) {
     sockaddr_in remote_addr = _convertToINET(ip_cp, port);
     return Bind((sockaddr *)&remote_addr, sizeof(remote_addr));
 }

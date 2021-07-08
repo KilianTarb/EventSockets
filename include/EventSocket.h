@@ -38,8 +38,8 @@ class EventSocket
         ~EventSocket();
 
         int GetSocketFileDesciptor();
-        bool Bind(const sockaddr *addr, socklen_t len);
-        bool Bind(const char *ip_cp, uint port, uint sock_type);
+        int Bind(const sockaddr *addr, socklen_t len);
+        int Bind(const char *ip_cp, uint port, uint sock_type);
         bool Listen(uint max_queue);
         int Accept(sockaddr *remote_addr, socklen_t *len);
         bool Connect(sockaddr *addr, socklen_t len);
